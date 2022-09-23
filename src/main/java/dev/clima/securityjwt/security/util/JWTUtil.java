@@ -17,6 +17,9 @@ public class JWTUtil {
     @Value("${jwt_secret}")
     private String secret;
 
+    @Value("${token_lifetime}")
+    private Integer lifetime;
+
     private final static String SUBJECT = "User Details";
 
     private final static String COMPANY_NAME = "CLIMA COMPANY";
@@ -25,8 +28,9 @@ public class JWTUtil {
         return JWT.create()
                 .withSubject(SUBJECT)
                 .withClaim("email", email)
-                .withIssuedAt(new Date())
+                .withIssuedAt(new Date(System.currentTimeMillis()))
                 .withIssuer(COMPANY_NAME)
+                .withExpiresAt(new Date(System.currentTimeMillis() + lifetime * 60 * 1000))
                 .sign(Algorithm.HMAC256(secret));
     }
 

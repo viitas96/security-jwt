@@ -30,29 +30,28 @@ public class JWTFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-        String authHeader =  request.getHeader("Authorization");
-        if (authHeader != null
-                && !authHeader.isBlank()
-                && !authHeader.startsWith("Bearer ")) {
+        String authHeader = request.getHeader("Authorization");
+
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
-            if ( token == null || token.isBlank()) {
-                response.sendError(SC_BAD_REQUEST, "Invalid JWT Token is Bearer Header");
-            } else {
-                try {
-                    String email = jwtUtil.validateTokenAndRetrieveSubject(token);
-                    UserDetails userDetails = userDetailService.loadUserByUsername(email);
-                    UsernamePasswordAuthenticationToken authToken =
-                            new UsernamePasswordAuthenticationToken(email,
-                                    userDetails.getPassword(),
-                                    userDetails.getAuthorities());
-                    if (SecurityContextHolder.getContext().getAuthentication() == null) {
-                        SecurityContextHolder.getContext().setAuthentication(authToken);
-                    }
-                } catch (JWTVerificationException exception) {
-                    response.sendError(SC_BAD_REQUEST, "Invalid JWT Token");
+
+            try {
+                String email = jwtUtil.validateTokenAndRetrieveSubject(token);
+                UserDetails userDetails = userDetailService.loadUserByUsername(email);
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(email,
+                                userDetails.getPassword(),
+                                userDetails.getAuthorities());
+
+                if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
+
+            } catch (JWTVerificationException exception) {
+                response.sendError(SC_BAD_REQUEST, "Invalid JWT Token");
             }
         }
+
         filterChain.doFilter(request, response);
     }
 }

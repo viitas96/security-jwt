@@ -1,54 +1,39 @@
 package dev.clima.securityjwt.controller;
 
-import dev.clima.securityjwt.dto.UserDTO;
+import dev.clima.securityjwt.dto.RegisterUserDTO;
+import dev.clima.securityjwt.dto.TokenDTO;
+import dev.clima.securityjwt.dto.LoginDTO;
 import dev.clima.securityjwt.entity.User;
-import dev.clima.securityjwt.repository.UserDAO;
-import dev.clima.securityjwt.security.util.JWTUtil;
+import dev.clima.securityjwt.security.service.SecurityService;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.modelmapper.ModelMapper;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
-import java.util.Map;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private UserDAO userDAO;
-    private JWTUtil jwtUtil;
-    private AuthenticationManager authenticationManager;
-    private PasswordEncoder passwordEncoder;
+    private ModelMapper modelMapper;
+
+    private SecurityService securityService;
 
     @PostMapping("/register")
-    public Map<String, Object> register(@RequestBody User user) {
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-        user = userDAO.save(user);
-        String token = jwtUtil.generateToken(user.getEmail());
-        return Collections.singletonMap("token", token);
+    public TokenDTO register(@RequestBody RegisterUserDTO dto) {
+        User user = modelMapper.map(dto, User.class);
+        String token = securityService.createUser(user);
+
+        return new TokenDTO(token);
     }
 
     @PostMapping("/login")
-    public Map<String, Object> auth(@RequestBody UserDTO userDTO) {
-        try {
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(userDTO.getEmail(),
-                            userDTO.getPassword());
-            authenticationManager.authenticate(authenticationToken);
-            String token = jwtUtil.generateToken(userDTO.getEmail());
+    public TokenDTO auth(@RequestBody LoginDTO loginDTO) {
+        String token = securityService.authenticate(modelMapper.map(loginDTO, User.class));
 
-            return Collections.singletonMap("token", token);
-        } catch (AuthenticationException authenticationException) {
-            throw new RuntimeException("Invalid credentials");
-        }
+        return new TokenDTO(token);
     }
 
 }
