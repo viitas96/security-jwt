@@ -17,13 +17,13 @@ public class JWTUtil {
     @Value("${jwt_secret}")
     private String secret;
 
-    private final static String subject = "User Details";
+    private final static String SUBJECT = "User Details";
 
     private final static String COMPANY_NAME = "CLIMA COMPANY";
 
     public String generateToken(String email) throws IllegalArgumentException, JWTCreationException {
         return JWT.create()
-                .withSubject(subject)
+                .withSubject(SUBJECT)
                 .withClaim("email", email)
                 .withIssuedAt(new Date())
                 .withIssuer(COMPANY_NAME)
@@ -32,7 +32,7 @@ public class JWTUtil {
 
     public String validateTokenAndRetrieveSubject(String token) throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
-                .withSubject(subject)
+                .withSubject(SUBJECT)
                 .withIssuer(COMPANY_NAME)
                 .build();
         DecodedJWT jwt = verifier.verify(token);
