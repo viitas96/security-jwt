@@ -1,21 +1,19 @@
 package dev.clima.securityjwt.dto;
 
-import dev.clima.securityjwt.security.Role;
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Setter
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 public class RegisterUserDTO {
 
     private String email;
 
     private String password;
 
-    private Role role;
-
+    @JsonProperty("roles_ids")
+    private List<Long> rolesIds;
 }

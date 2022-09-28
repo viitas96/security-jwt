@@ -17,8 +17,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.http.HttpServletResponse;
 
-import static dev.clima.securityjwt.security.Role.ADMIN;
-import static dev.clima.securityjwt.security.Role.USER;
 import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 
 @Configuration
@@ -34,9 +32,9 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> {
-                    auth.antMatchers("/api/auth/**").permitAll();
-                    auth.antMatchers("/api/user/**").hasRole(USER.name());
-                    auth.antMatchers("/api/admin/**").hasRole(ADMIN.name());
+                    auth.antMatchers("/auth/**").permitAll();
+                    auth.antMatchers("/api/admin/**").hasAuthority("ADMIN");
+//                    auth.antMatchers("/api/admin/**").hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement().sessionCreationPolicy(STATELESS)

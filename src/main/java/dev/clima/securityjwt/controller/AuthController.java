@@ -24,7 +24,7 @@ public class AuthController {
     @PostMapping("/register")
     public TokenDTO register(@RequestBody RegisterUserDTO dto) {
         User user = modelMapper.map(dto, User.class);
-        String token = securityService.createUser(user);
+        String token = securityService.createUser(user, dto.getRolesIds());
 
         return new TokenDTO(token);
     }
