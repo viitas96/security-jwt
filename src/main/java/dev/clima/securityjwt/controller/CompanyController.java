@@ -3,7 +3,6 @@ package dev.clima.securityjwt.controller;
 import dev.clima.securityjwt.dto.CompanyDTO;
 import dev.clima.securityjwt.entity.Company;
 import dev.clima.securityjwt.service.CompanyService;
-import dev.clima.securityjwt.util.UserUtil;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,17 +31,13 @@ public class CompanyController {
     }
 
     @GetMapping
-    private List<Company> getCompanies() {
+    public List<Company> getCompanies() {
         return companyService.getAll();
     }
 
     @PostMapping
     public Company addCompany(@RequestBody Company company) {
         return companyService.save(company);
-    }
-
-    private long getLong() {
-        return 4L;
     }
 
 }

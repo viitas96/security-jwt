@@ -17,10 +17,7 @@ public class UserController {
     private UserDAO userDAO;
 
     @GetMapping("/info")
-//    @PreAuthorize("hasAuthority(ADMIN-READ)")
     public String getUserDetails() {
-        var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        var user = userDAO.findByEmail(email);
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 

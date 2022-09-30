@@ -16,7 +16,6 @@ public class ManagerController {
 
     @GetMapping("/info")
     public String getUserDetails() {
-        var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
