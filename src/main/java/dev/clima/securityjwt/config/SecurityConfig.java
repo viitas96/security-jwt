@@ -37,9 +37,9 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeRequests( auth -> {
-                    auth.antMatchers( "/api/auth/**").permitAll();
-                    pathService.getAll().forEach( path -> {
+                .authorizeRequests(auth -> {
+                    auth.antMatchers("/api/auth/**").permitAll();
+                    pathService.getAll().forEach(path -> {
                         path.getRoles().forEach(role ->
                                 auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));
                         path.getPrivileges().forEach(privilege ->
@@ -69,6 +69,6 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManagerBean(AuthenticationConfiguration authenticationConfiguration)
             throws Exception {
-        return authenticationConfiguration.getAuthenticationManager() ;
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
