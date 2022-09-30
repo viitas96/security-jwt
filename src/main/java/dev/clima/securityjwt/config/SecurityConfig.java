@@ -2,10 +2,10 @@ package dev.clima.securityjwt.config;
 
 import dev.clima.securityjwt.security.JWTFilter;
 import dev.clima.securityjwt.security.service.UserDetailServiceImpl;
+import dev.clima.securityjwt.service.PathService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -31,16 +31,20 @@ public class SecurityConfig {
 
     private UserDetailServiceImpl userDetailService;
 
+    private PathService pathService;
+
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> {
-                    auth.antMatchers( "/**/**").permitAll();
-//                    auth.antMatchers( "/api/auth/**").permitAll();
-//                    auth.antMatchers("/api/test/**").permitAll();
-//                    auth.antMatchers("/api/role/**").hasRole("ADMIN");
-//                    auth.antMatchers("/api/privilege/**").hasRole("ADMIN");
-//                    auth.antMatchers("/api/info/**").hasAuthority("ADMIN:WRITE");
+                    auth.antMatchers( "/api/auth/**").permitAll();
+                    pathService.getAll().forEach( path -> {
+                        path.getRoles().forEach(role ->
+                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));
+                        path.getPrivileges().forEach(privilege ->
+                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(privilege.getName()));
+                    });
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement().sessionCreationPolicy(STATELESS)

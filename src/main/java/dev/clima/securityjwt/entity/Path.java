@@ -1,10 +1,11 @@
 package dev.clima.securityjwt.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.http.HttpMethod;
 
 import javax.persistence.Entity;
@@ -34,8 +35,10 @@ public class Path {
     private HttpMethod httpMethod;
 
     @ManyToMany(mappedBy = "paths")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Role> roles = new HashSet<>();
 
     @ManyToMany(mappedBy = "paths")
+    @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Privilege> privileges = new HashSet<>();
 }
