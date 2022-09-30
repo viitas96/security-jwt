@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+
 @Service
 @AllArgsConstructor
 public class PathService {
@@ -19,8 +25,22 @@ public class PathService {
 
     private PrivilegeService privilegeService;
 
-    public Path addPath(Path path) {
-        return pathDAO.save(path);
+    public void addPath(Path path) {
+
+        if (path.getHttpMethod() == null) {
+            String name = path.getName();
+            List<Path> paths = List.of(
+                    Path.builder().httpMethod(GET).name(name).build(),
+                    Path.builder().httpMethod(POST).name(name).build(),
+                    Path.builder().httpMethod(PUT).name(name).build(),
+                    Path.builder().httpMethod(PATCH).name(name).build(),
+                    Path.builder().httpMethod(DELETE).name(name).build()
+            );
+            pathDAO.saveAll(paths);
+        } else {
+            pathDAO.save(path);
+        }
+
     }
 
     public List<Path> getAll() {

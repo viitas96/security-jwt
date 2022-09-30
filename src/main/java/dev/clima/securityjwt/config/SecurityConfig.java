@@ -44,6 +44,8 @@ public class SecurityConfig {
                                 auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));
                         path.getPrivileges().forEach(privilege ->
                                 auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(privilege.getName()));
+                        path.getAccessRules().forEach(accessRule ->
+                                auth.antMatchers(path.getHttpMethod(), path.getName()).access(accessRule.getRule()));
                     });
                     auth.anyRequest().authenticated();
                 })

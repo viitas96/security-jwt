@@ -12,9 +12,11 @@ public class UserUtil {
 
     private UserDAO userDAO;
 
-    public User getCurrentUser() {
+    public boolean getCompanyIdFromUser(long companyId) {
         String username = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDAO.findByEmail(username).orElseThrow(null);
+        User user = userDAO.findByEmail(username).orElseThrow(null);
+
+        return companyId == user.getCompany().getId();
     }
 
 

@@ -5,7 +5,6 @@ import dev.clima.securityjwt.entity.Company;
 import dev.clima.securityjwt.service.CompanyService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,7 +24,6 @@ public class CompanyController {
     private ModelMapper modelMapper;
 
     @GetMapping("/{id}")
-    @PreAuthorize("@userUtil.currentUser.company.id == #id")
     public CompanyDTO getCompany(@PathVariable long id) {
         return modelMapper.map(companyService.getById(id), CompanyDTO.class);
     }

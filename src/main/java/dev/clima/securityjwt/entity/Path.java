@@ -1,6 +1,7 @@
 package dev.clima.securityjwt.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.util.HashSet;
 @Entity
 @Setter
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class Path {
@@ -41,4 +43,8 @@ public class Path {
     @ManyToMany(mappedBy = "paths")
     @LazyCollection(LazyCollectionOption.FALSE)
     private Collection<Privilege> privileges = new HashSet<>();
+
+    @ManyToMany(mappedBy = "paths")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private Collection<AccessRule> accessRules = new HashSet<>();
 }
