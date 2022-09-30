@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/privilege")
+@RequestMapping("/api/privileges")
 public class PrivilegeController {
 
     private final ModelMapper modelMapper;

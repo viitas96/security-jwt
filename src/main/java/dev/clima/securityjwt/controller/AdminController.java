@@ -15,6 +15,7 @@ public class AdminController {
     private UserDAO userDAO;
 
     @GetMapping("/info")
+//    @PreAuthorize("isAuthenticated() and principal.")
     public String getUserDetails() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }

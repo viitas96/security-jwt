@@ -28,4 +28,8 @@ public class PrivilegeService {
     public List<Privilege> getAll() {
         return privilegeDAO.findAll();
     }
+
+    public Privilege getById(long permissionId) {
+        return privilegeDAO.findById(permissionId).orElseThrow(null);
+    }
 }

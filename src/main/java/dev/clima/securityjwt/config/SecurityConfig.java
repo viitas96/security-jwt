@@ -5,8 +5,10 @@ import dev.clima.securityjwt.security.service.UserDetailServiceImpl;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -22,6 +24,7 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @Configuration
 @EnableWebSecurity
 @AllArgsConstructor
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private JWTFilter jwtFilter;
@@ -32,9 +35,12 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests( auth -> {
-                    auth.antMatchers("/auth/**").permitAll();
-                    auth.antMatchers("/api/admin/**").hasAuthority("ADMIN");
-//                    auth.antMatchers("/api/admin/**").hasRole("ADMIN");
+                    auth.antMatchers( "/**/**").permitAll();
+//                    auth.antMatchers( "/api/auth/**").permitAll();
+//                    auth.antMatchers("/api/test/**").permitAll();
+//                    auth.antMatchers("/api/role/**").hasRole("ADMIN");
+//                    auth.antMatchers("/api/privilege/**").hasRole("ADMIN");
+//                    auth.antMatchers("/api/info/**").hasAuthority("ADMIN:WRITE");
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement().sessionCreationPolicy(STATELESS)

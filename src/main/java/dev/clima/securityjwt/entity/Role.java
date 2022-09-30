@@ -21,6 +21,7 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Getter
@@ -33,7 +34,7 @@ public class Role implements GrantedAuthority, Serializable {
     private static final long serialVersionUID = 1905632041950251207L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true)
@@ -49,6 +50,15 @@ public class Role implements GrantedAuthority, Serializable {
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "privilege_id", referencedColumnName = "id"))
     private Collection<Privilege> privileges = new ArrayList<>();
+
+    @ManyToMany()
+    @Cascade({CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "roles_paths",
+            joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "path_id", referencedColumnName = "id")
+    )
+    private Collection<Path> paths = new HashSet<>();
 
     @Override
     public String getAuthority() {
