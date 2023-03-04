@@ -5,6 +5,7 @@ import dev.clima.securityjwt.entity.Company;
 import dev.clima.securityjwt.entity.User;
 import dev.clima.securityjwt.repository.CompanyDAO;
 import dev.clima.securityjwt.repository.UserDAO;
+import dev.clima.securityjwt.util.exception.ResourceNotFoundException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,13 @@ public class CompanyService {
     public CompanyDTO save(CompanyDTO dto) {
         Company company = companyDAO.save(modelMapper.map(dto, Company.class));
         return modelMapper.map(company, CompanyDTO.class);
+    }
+
+    public CompanyDTO updateCompany(long companyId, CompanyDTO dto) {
+        Company company = companyDAO.findById(companyId)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+        company.setName(dto.getName());
+        return modelMapper.map(companyDAO.save(company), CompanyDTO.class);
     }
 
     public void delete(Long id) {
