@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ApplicationException extends RuntimeException{
+public class BadCredentialsException extends RuntimeException{
 
     private String message;
 
