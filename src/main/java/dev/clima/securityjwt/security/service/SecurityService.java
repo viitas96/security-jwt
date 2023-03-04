@@ -7,7 +7,7 @@ import dev.clima.securityjwt.entity.User;
 import dev.clima.securityjwt.repository.UserDAO;
 import dev.clima.securityjwt.security.util.JWTUtil;
 import dev.clima.securityjwt.service.RoleService;
-import dev.clima.securityjwt.util.exception.ApplicationException;
+import dev.clima.securityjwt.util.exception.BadCredentialsException;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -43,7 +43,7 @@ public class SecurityService {
 
             return jwtUtil.generateToken(user.getEmail());
         } catch (AuthenticationException authenticationException) {
-            throw new ApplicationException("Invalid credentials");
+            throw new BadCredentialsException("Invalid credentials");
         }
     }
 

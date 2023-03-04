@@ -23,13 +23,13 @@ public class CompanyService {
     private final ModelMapper modelMapper;
 
     public CompanyDTO getById(Long id) {
-        return modelMapper.map(companyDAO.findById(id).orElseThrow(() -> new RuntimeException("Company not found!")),
+        return modelMapper.map(companyDAO.findById(id).orElseThrow(() -> new ResourceNotFoundException("Company not found!")),
                 CompanyDTO.class);
     }
 
     public void addUser(long companyId, long userId) {
-        User user = userDAO.findById(userId).orElseThrow(null);
-        user.setCompany(companyDAO.findById(companyId).orElseThrow(null));
+        User user = userDAO.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        user.setCompany(companyDAO.findById(companyId).orElseThrow(() -> new ResourceNotFoundException("Company not found")));
         userDAO.save(user);
     }
 
@@ -50,7 +50,9 @@ public class CompanyService {
     }
 
     public void delete(Long id) {
-        companyDAO.deleteById(id);
+        var company = companyDAO.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Company not found"));
+        companyDAO.delete(company);
     }
 
 }
