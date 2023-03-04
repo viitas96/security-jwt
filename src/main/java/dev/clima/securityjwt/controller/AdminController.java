@@ -3,6 +3,7 @@ package dev.clima.securityjwt.controller;
 import dev.clima.securityjwt.repository.UserDAO;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,9 +16,13 @@ public class AdminController {
     private UserDAO userDAO;
 
     @GetMapping("/info")
-//    @PreAuthorize("isAuthenticated() and principal.")
     public String getUserDetails() {
         return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    @DeleteMapping
+    public String deleteSomething() {
+        return "deleted";
     }
 
 }

@@ -7,6 +7,8 @@ import lombok.Setter;
 @Setter
 public class AccessRuleDTO {
 
+    private Long id;
+
     private String rule;
 
 }

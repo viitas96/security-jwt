@@ -1,12 +1,12 @@
 package dev.clima.securityjwt.controller;
 
+import dev.clima.securityjwt.dto.LoginDTO;
 import dev.clima.securityjwt.dto.RegisterUserDTO;
 import dev.clima.securityjwt.dto.TokenDTO;
-import dev.clima.securityjwt.dto.LoginDTO;
-import dev.clima.securityjwt.entity.User;
 import dev.clima.securityjwt.security.service.SecurityService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,18 +22,13 @@ public class AuthController {
     private SecurityService securityService;
 
     @PostMapping("/register")
-    public TokenDTO register(@RequestBody RegisterUserDTO dto) {
-        User user = modelMapper.map(dto, User.class);
-        String token = securityService.createUser(user, dto.getRolesIds());
-
-        return new TokenDTO(token);
+    public ResponseEntity<TokenDTO> register(@RequestBody RegisterUserDTO dto) {
+        return ResponseEntity.ok(new TokenDTO(securityService.createUser(dto)));
     }
 
     @PostMapping("/login")
-    public TokenDTO auth(@RequestBody LoginDTO loginDTO) {
-        String token = securityService.authenticate(modelMapper.map(loginDTO, User.class));
-
-        return new TokenDTO(token);
+    public ResponseEntity<TokenDTO> auth(@RequestBody LoginDTO loginDTO) {
+        return ResponseEntity.ok(new TokenDTO(securityService.authenticate(loginDTO)));
     }
 
 }

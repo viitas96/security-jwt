@@ -4,7 +4,6 @@ import dev.clima.securityjwt.service.CompanyService;
 import dev.clima.securityjwt.util.EntityId;
 import dev.clima.securityjwt.util.Status;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class CompanyManagementController {
     @PostMapping("/add-employee")
     public ResponseEntity<Status> addEmployee(@PathVariable long companyId, @RequestBody EntityId entityId) {
         companyService.addUser(companyId, entityId.getId());
-        return new ResponseEntity<>(new Status("success"), HttpStatus.CREATED);
+        return ResponseEntity.ok(new Status("success"));
     }
 
 }
