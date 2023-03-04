@@ -25,7 +25,11 @@ import java.util.HashSet;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Path extends AbstractEntity {
+public class Path {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 

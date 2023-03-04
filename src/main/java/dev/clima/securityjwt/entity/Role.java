@@ -28,10 +28,14 @@ import java.util.HashSet;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends AbstractEntity implements GrantedAuthority, Serializable {
+public class Role implements GrantedAuthority, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1905632041950251207L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(unique = true)
     private String name;

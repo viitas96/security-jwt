@@ -22,7 +22,11 @@ import java.util.HashSet;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccessRule extends AbstractEntity {
+public class AccessRule {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String rule;
 
