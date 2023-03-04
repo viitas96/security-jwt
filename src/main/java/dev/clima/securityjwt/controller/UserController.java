@@ -1,6 +1,5 @@
 package dev.clima.securityjwt.controller;
 
-import dev.clima.securityjwt.entity.User;
 import dev.clima.securityjwt.repository.UserDAO;
 import lombok.AllArgsConstructor;
 import lombok.ToString;
@@ -12,15 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @ToString
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 public class UserController {
 
     private UserDAO userDAO;
 
     @GetMapping("/info")
-    public User getUserDetails() {
-        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return userDAO.findByEmail(email).get();
+    public String getUserDetails() {
+        return (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }
