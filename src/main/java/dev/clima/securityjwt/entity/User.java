@@ -28,14 +28,11 @@ import static com.fasterxml.jackson.annotation.JsonProperty.Access.WRITE_ONLY;
 @Getter
 @Setter
 @NoArgsConstructor
-public class User implements UserDetails, Serializable {
+public class User extends AbstractEntity implements UserDetails, Serializable {
 
     @Serial
     private static final long serialVersionUID = 1905632041950251207L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     @Column(unique = true)
     private String email;

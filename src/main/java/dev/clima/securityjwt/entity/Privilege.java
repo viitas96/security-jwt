@@ -21,11 +21,7 @@ import java.util.HashSet;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Privilege {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class Privilege extends AbstractEntity {
 
     private String name;
 
