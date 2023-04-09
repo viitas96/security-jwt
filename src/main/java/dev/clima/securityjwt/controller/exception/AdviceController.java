@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 @ControllerAdvice
 public class AdviceController extends ResponseEntityExceptionHandler {
 
@@ -18,6 +20,11 @@ public class AdviceController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler
     private ResponseEntity<GenericMessage> handleException(ResourceNotFoundException e) {
+        return ResponseEntity.badRequest().body(new GenericMessage(e.getMessage()));
+    }
+
+    @ExceptionHandler
+    private ResponseEntity<GenericMessage> handleException(SQLIntegrityConstraintViolationException e) {
         return ResponseEntity.badRequest().body(new GenericMessage(e.getMessage()));
     }
 

@@ -6,6 +6,7 @@ import dev.clima.securityjwt.service.PathService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +37,17 @@ public class SecurityConfig {
 
     @Bean
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
+
+        http.cors().configurationSource(request -> {
+            var config = new CorsConfiguration().applyPermitDefaultValues();
+
+            config.addAllowedMethod(HttpMethod.POST);
+            config.addAllowedMethod(HttpMethod.PUT);
+            config.addAllowedMethod(HttpMethod.PATCH);
+            config.addAllowedMethod(HttpMethod.DELETE);
+
+            return config;
+        });
 
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> {

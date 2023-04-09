@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -39,6 +40,16 @@ public class User implements UserDetails, Serializable {
     @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
+    private String nickName;
+
+    @ColumnDefault(value = "0")
+    private int wins;
+
+    @ColumnDefault(value = "0")
+    private int loses;
+
+
     @JsonProperty(access = WRITE_ONLY)
     private String password;
 
@@ -61,15 +72,10 @@ public class User implements UserDetails, Serializable {
 
     private boolean isEnabled;
 
-    public User(String email, String password) {
+    public User(String email, String nickName, String password) {
         this.email = email;
+        this.nickName = nickName;
         this.password = password;
-    }
-
-    public User(String email, String password, Collection<Role> roles) {
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
     }
 
     @Override
