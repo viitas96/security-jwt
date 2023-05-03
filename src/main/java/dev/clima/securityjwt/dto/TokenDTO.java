@@ -1,3 +1,3 @@
 package dev.clima.securityjwt.dto;
 
-public record TokenDTO (String token) { }
+public record TokenDTO (String token, String nickname) { }

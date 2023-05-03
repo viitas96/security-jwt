@@ -2,6 +2,7 @@ package dev.clima.securityjwt.security.service;
 
 import dev.clima.securityjwt.dto.LoginDTO;
 import dev.clima.securityjwt.dto.RegisterUserDTO;
+import dev.clima.securityjwt.dto.TokenDTO;
 import dev.clima.securityjwt.entity.User;
 import dev.clima.securityjwt.repository.UserDAO;
 import dev.clima.securityjwt.security.util.JWTUtil;
@@ -24,7 +25,7 @@ public class SecurityService {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public String authenticate(LoginDTO dto) {
+    public TokenDTO authenticate(LoginDTO dto) {
         User user = modelMapper.map(dto, User.class);
         try {
             UsernamePasswordAuthenticationToken authenticationToken =
@@ -32,19 +33,21 @@ public class SecurityService {
                             user.getPassword());
             authenticationManager.authenticate(authenticationToken);
 
-            return jwtUtil.generateToken(user.getEmail());
+            var token = jwtUtil.generateToken(user.getEmail());
+            return new TokenDTO(token, user.getNickName());
         } catch (AuthenticationException authenticationException) {
             throw new BadCredentialsException("Invalid credentials");
         }
     }
 
-    public String createUser(RegisterUserDTO dto) {
+    public TokenDTO createUser(RegisterUserDTO dto) {
         User user = modelMapper.map(dto, User.class);
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         user = userDAO.save(user);
 
-        return jwtUtil.generateToken(user.getEmail());
+        var token = jwtUtil.generateToken(user.getEmail());
+        return new TokenDTO(token, user.getNickName());
     }
 
 }
