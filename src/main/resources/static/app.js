@@ -11,7 +11,7 @@ async function login() {
     let error = true
 
     await axios
-        .post('http://localhost:8081/api/auth/login', data)
+        .post('http://localhost:9090/api/auth/login', data)
         .then((response) => {
             error = false
             localStorage.setItem('token', response.data.token);

@@ -11,7 +11,7 @@ window.onload = async function () {
 
     let id = localStorage.getItem("id")
 
-    await axios.get(`http://localhost:8081/api/questions/${id}`, config)
+    await axios.get(`http://localhost:9090/api/questions/${id}`, config)
         .then(function (response) {
             serverResponse = response.data;
             console.log('Data loaded successfully');
@@ -20,7 +20,7 @@ window.onload = async function () {
             console.log('Error:', error);
         });
 
-    await axios.get(`http://localhost:8081/api/questions/get-info/${id}`, config)
+    await axios.get(`http://localhost:9090/api/questions/get-info/${id}`, config)
         .then(function (response) {
             results = response.data;
             console.log('Data loaded successfully');

@@ -8,7 +8,7 @@ window.onload = async function () {
         }
     }
 
-    await axios.get('http://localhost:8081/api/questions', config)
+    await axios.get('http://localhost:9090/api/questions', config)
         .then(function (response) {
             globalVariable = response.data;
             console.log('Data loaded successfully');
