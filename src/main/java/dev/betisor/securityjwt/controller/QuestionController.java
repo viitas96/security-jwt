@@ -3,6 +3,7 @@ package dev.betisor.securityjwt.controller;
 import dev.betisor.securityjwt.dto.ResponsesInfoDTO;
 import dev.betisor.securityjwt.entity.Question;
 import dev.betisor.securityjwt.entity.User;
+import dev.betisor.securityjwt.entity.UserResponse;
 import dev.betisor.securityjwt.repository.QuestionRepository;
 import dev.betisor.securityjwt.repository.UserDAO;
 import dev.betisor.securityjwt.repository.UserResponseRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,8 +51,16 @@ public class QuestionController {
         return ResponseEntity.ok(response);
     }
 
-//    public ResponseEntity<Void> answdser(Long id) {
-//
-//    }
+    @PostMapping("/response/{id}/{response}")
+    public ResponseEntity<Void> answer(@PathVariable Long id,
+                                       @PathVariable Integer response) {
+        var email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var user = userDAO.findByEmail(email).orElse(null);
+        var question = questionRepository.findById(id).orElse(null);
+        var userResponse = new UserResponse(user, question, response);
+        userResponseRepository.save(userResponse);
+
+        return ResponseEntity.noContent().build();
+    }
 
 }

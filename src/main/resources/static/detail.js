@@ -54,7 +54,24 @@ function sendAnswers() {
     let e = document.getElementById("exampleFormControlSelect1");
     let value = e.value;
     let text = e.options[e.selectedIndex].text;
+    let questionId = localStorage.getItem("id");
 
-    console.log(value)
-    console.log(text)
+    let config = {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`
+        }
+    }
+
+    axios.post(`http://localhost:9090/api/questions/response/${questionId}/${text}`, {}, config)
+        .then((response) => {
+
+        }).catch((error) => {
+        console.log(error)
+    })
+
+    location.reload()
+}
+
+function back() {
+    window.location.href = "main.html";
 }

@@ -1,3 +1,9 @@
+let errorMessage = document.getElementById("error-message")
+
+window.onload = function () {
+    errorMessage.style.display = "none"
+}
+
 async function login() {
     let username = document.getElementById("email").value
     let password = document.getElementById("password").value
@@ -24,5 +30,7 @@ async function login() {
 
     if (!error) {
         window.location.href = "main.html";
+    } else {
+        errorMessage.style.display = "block"
     }
 }
