@@ -52,14 +52,21 @@ public class SecurityConfig {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(auth -> {
                     auth.antMatchers("/api/auth/**").permitAll();
-                    pathService.getAll().forEach(path -> {
-                        path.getRoles().forEach(role ->
-                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));
-                        path.getPrivileges().forEach(privilege ->
-                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(privilege.getName()));
-                        path.getAccessRules().forEach(accessRule ->
-                                auth.antMatchers(path.getHttpMethod(), path.getName()).access(accessRule.getRule()));
-                    });
+                    auth.antMatchers("/index.html").permitAll();
+                    auth.antMatchers("/main.html").permitAll();
+                    auth.antMatchers("/detail.html").permitAll();
+                    auth.antMatchers("/app.js").permitAll();
+                    auth.antMatchers("/main.js").permitAll();
+                    auth.antMatchers("/detail.js").permitAll();
+                    auth.antMatchers("/").permitAll();
+//                    pathService.getAll().forEach(path -> {
+//                        path.getRoles().forEach(role ->
+//                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));
+//                        path.getPrivileges().forEach(privilege ->
+//                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(privilege.getName()));
+//                        path.getAccessRules().forEach(accessRule ->
+//                                auth.antMatchers(path.getHttpMethod(), path.getName()).access(accessRule.getRule()));
+//                    });
                     auth.anyRequest().authenticated();
                 })
                 .sessionManagement().sessionCreationPolicy(STATELESS)
