@@ -59,6 +59,7 @@ public class SecurityConfig {
                     auth.antMatchers("/main.js").permitAll();
                     auth.antMatchers("/detail.js").permitAll();
                     auth.antMatchers("/").permitAll();
+                    auth.antMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll();
 //                    pathService.getAll().forEach(path -> {
 //                        path.getRoles().forEach(role ->
 //                                auth.antMatchers(path.getHttpMethod(), path.getName()).hasAuthority(role.getName()));

@@ -40,7 +40,6 @@ public class User implements UserDetails, Serializable {
     @Column(unique = true)
     private String email;
 
-    @Column(unique = true)
     private String nickName;
 
     @ColumnDefault(value = "0")
